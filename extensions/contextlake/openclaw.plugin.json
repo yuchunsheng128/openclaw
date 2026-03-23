@@ -1,11 +1,24 @@
 {
-  "id": "tos-tools",
-  "name": "TOS Tools",
-  "description": "Volcengine TOS (S3 compatible) Toolkit",
+  "id": "contextlake",
+  "name": "ContextLake Toolkit",
+  "description": "Volcengine Lake AI Service (LAS) Toolkit & TOS (S3 compatible) File Storage Utilities.",
+  "skills": ["./skills"],
   "providerAuthEnvVars": {
-    "tos-tools": ["TOS_ACCESS_KEY", "TOS_SECRET_KEY"]
+    "contextlake": ["LAS_API_KEY", "LAS_REGION", "TOS_ACCESS_KEY", "TOS_SECRET_KEY"]
   },
   "uiHints": {
+    "las": {
+      "region": {
+        "label": "LAS Region",
+        "help": "LAS Region (e.g. cn-beijing). Defaults to cn-beijing."
+      },
+      "apiKey": {
+        "label": "LAS API Key",
+        "help": "Your Volcengine LAS API Key (fallback: LAS_API_KEY env var).",
+        "sensitive": true,
+        "placeholder": "..."
+      }
+    },
     "tos": {
       "endpoint": {
         "label": "TOS Endpoint",
@@ -30,6 +43,18 @@
     "type": "object",
     "additionalProperties": false,
     "properties": {
+      "las": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "region": {
+            "type": "string"
+          },
+          "apiKey": {
+            "type": ["string", "object"]
+          }
+        }
+      },
       "tos": {
         "type": "object",
         "additionalProperties": false,

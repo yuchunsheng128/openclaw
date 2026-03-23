@@ -263,6 +263,12 @@ importers:
 
   extensions/cloudflare-ai-gateway: {}
 
+  extensions/contextlake:
+    dependencies:
+      '@volcengine/tos-sdk':
+        specifier: ^2.9.1
+        version: 2.9.1(@types/express@5.0.6)
+
   extensions/copilot-proxy: {}
 
   extensions/diagnostics-otel:
@@ -387,8 +393,6 @@ importers:
   extensions/kilocode: {}
 
   extensions/kimi-coding: {}
-
-  extensions/las-toolkit: {}
 
   extensions/line:
     devDependencies:
@@ -594,12 +598,6 @@ importers:
         version: link:../..
 
   extensions/together: {}
-
-  extensions/tos-tools:
-    dependencies:
-      '@volcengine/tos-sdk':
-        specifier: ^2.9.1
-        version: 2.9.1(@types/express@5.0.6)
 
   extensions/twitch:
     dependencies:

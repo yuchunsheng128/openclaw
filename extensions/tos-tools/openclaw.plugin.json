@@ -2,41 +2,52 @@
   "id": "tos-tools",
   "name": "TOS Tools",
   "description": "Volcengine TOS (S3 compatible) Toolkit",
+  "providerAuthEnvVars": {
+    "tos-tools": ["TOS_ACCESS_KEY", "TOS_SECRET_KEY"]
+  },
+  "uiHints": {
+    "tos": {
+      "endpoint": {
+        "label": "TOS Endpoint",
+        "help": "TOS API Endpoint (e.g. tos-cn-beijing.volces.com)"
+      },
+      "region": {
+        "label": "TOS Region",
+        "help": "TOS Region (e.g. cn-beijing)"
+      },
+      "accessKeyId": {
+        "label": "TOS Access Key ID",
+        "help": "Your Volcengine Access Key ID (fallback: TOS_ACCESS_KEY env var)."
+      },
+      "secretAccessKey": {
+        "label": "TOS Secret Access Key",
+        "help": "Your Volcengine Secret Access Key (fallback: TOS_SECRET_KEY env var).",
+        "sensitive": true
+      }
+    }
+  },
   "configSchema": {
     "type": "object",
     "additionalProperties": false,
     "properties": {
-      "endpoint": {
-        "type": "string"
-      },
-      "region": {
-        "type": "string"
-      },
-      "accessKeyId": {
-        "type": "string"
-      },
-      "secretAccessKey": {
-        "type": "string"
+      "tos": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "endpoint": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "accessKeyId": {
+            "type": ["string", "object"]
+          },
+          "secretAccessKey": {
+            "type": ["string", "object"]
+          }
+        }
       }
-    }
-  },
-  "uiHints": {
-    "endpoint": {
-      "label": "TOS Endpoint",
-      "help": "TOS API Endpoint (e.g. https://tos-cn-beijing.volces.com)"
-    },
-    "region": {
-      "label": "TOS Region",
-      "help": "TOS Region (e.g. cn-beijing)"
-    },
-    "accessKeyId": {
-      "label": "TOS Access Key ID",
-      "help": "Your Volcengine Access Key ID"
-    },
-    "secretAccessKey": {
-      "label": "TOS Secret Access Key",
-      "help": "Your Volcengine Secret Access Key",
-      "sensitive": true
     }
   }
 }

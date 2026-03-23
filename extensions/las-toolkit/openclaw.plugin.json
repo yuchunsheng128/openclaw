@@ -3,27 +3,39 @@
   "name": "LAS Toolkit",
   "description": "Volcengine Lake AI Service (LAS) Toolkit",
   "skills": ["./skills"],
+  "providerAuthEnvVars": {
+    "las-toolkit": ["LAS_API_KEY"]
+  },
+  "uiHints": {
+    "las": {
+      "endpoint": {
+        "label": "LAS Endpoint",
+        "help": "LAS API Base Endpoint (e.g. https://las.volces.com). Optional, default is often https://operator.las.cn-beijing.volces.com"
+      },
+      "apiKey": {
+        "label": "LAS API Key",
+        "help": "Your Volcengine LAS API Key (fallback: LAS_API_KEY env var).",
+        "sensitive": true,
+        "placeholder": "..."
+      }
+    }
+  },
   "configSchema": {
     "type": "object",
     "additionalProperties": false,
     "properties": {
-      "endpoint": {
-        "type": "string"
-      },
-      "apiKey": {
-        "type": "string"
+      "las": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "endpoint": {
+            "type": "string"
+          },
+          "apiKey": {
+            "type": ["string", "object"]
+          }
+        }
       }
-    }
-  },
-  "uiHints": {
-    "endpoint": {
-      "label": "LAS Endpoint",
-      "help": "LAS API Base Endpoint (e.g. https://las.volces.com)"
-    },
-    "apiKey": {
-      "label": "LAS API Key",
-      "help": "Your Volcengine LAS API Key",
-      "sensitive": true
     }
   }
 }

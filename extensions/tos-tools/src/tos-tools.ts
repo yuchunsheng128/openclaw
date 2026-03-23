@@ -6,15 +6,15 @@ import { jsonResult, readStringParam, readNumberParam } from "openclaw/plugin-sd
 import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-runtime";
 
 function getTosClient(api: OpenClawPluginApi) {
-  const endpoint = ((api.config as any).endpoint as string | undefined) || process.env.TOS_ENDPOINT;
-  const region =
-    ((api.config as any).region as string | undefined) || process.env.TOS_REGION || "cn-beijing";
+  const tosConfig = (api.config as any).tos || {};
+  const endpoint = (tosConfig.endpoint as string | undefined) || process.env.TOS_ENDPOINT;
+  const region = (tosConfig.region as string | undefined) || process.env.TOS_REGION || "cn-beijing";
   const accessKeyId =
-    ((api.config as any).accessKeyId as string | undefined) ||
+    (tosConfig.accessKeyId as string | undefined) ||
     process.env.VOLCENGINE_ACCESS_KEY_ID ||
     process.env.TOS_ACCESS_KEY;
   const secretAccessKey =
-    ((api.config as any).secretAccessKey as string | undefined) ||
+    (tosConfig.secretAccessKey as string | undefined) ||
     process.env.VOLCENGINE_SECRET_ACCESS_KEY ||
     process.env.TOS_SECRET_KEY;
 

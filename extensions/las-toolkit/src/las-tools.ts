@@ -18,8 +18,9 @@ export function createLasSubmitTool(api: OpenClawPluginApi) {
     description: "Submit a task to Volcengine Lake AI Service (LAS)",
     parameters: LasSubmitSchema,
     execute: async (_toolCallId: string, rawParams: Record<string, unknown>) => {
-      const endpoint = (api.config as any).endpoint as string | undefined;
-      let apiKey = (api.config as any).apiKey as string | undefined;
+      const lasConfig = (api.config as any).las || {};
+      const endpoint = lasConfig.endpoint as string | undefined;
+      let apiKey = lasConfig.apiKey as string | undefined;
 
       if (!endpoint || !apiKey) {
         apiKey = process.env.LAS_API_KEY || apiKey;
@@ -75,8 +76,9 @@ export function createLasPollTool(api: OpenClawPluginApi) {
     description: "Poll the status and result of a task in Volcengine Lake AI Service (LAS)",
     parameters: LasPollSchema,
     execute: async (_toolCallId: string, rawParams: Record<string, unknown>) => {
-      const endpoint = (api.config as any).endpoint as string | undefined;
-      let apiKey = (api.config as any).apiKey as string | undefined;
+      const lasConfig = (api.config as any).las || {};
+      const endpoint = lasConfig.endpoint as string | undefined;
+      let apiKey = lasConfig.apiKey as string | undefined;
 
       if (!endpoint || !apiKey) {
         apiKey = process.env.LAS_API_KEY || apiKey;
@@ -134,8 +136,9 @@ export function createLasGenericRequestTool(api: OpenClawPluginApi) {
     description: "Make a generic POST request to Volcengine Lake AI Service (LAS) API",
     parameters: LasGenericRequestSchema,
     execute: async (_toolCallId: string, rawParams: Record<string, unknown>) => {
-      const endpoint = (api.config as any).endpoint as string | undefined;
-      let apiKey = (api.config as any).apiKey as string | undefined;
+      const lasConfig = (api.config as any).las || {};
+      const endpoint = lasConfig.endpoint as string | undefined;
+      let apiKey = lasConfig.apiKey as string | undefined;
 
       if (!endpoint || !apiKey) {
         apiKey = process.env.LAS_API_KEY || apiKey;

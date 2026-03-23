@@ -1,7 +1,6 @@
 {
   "name": "@openclaw/tos-tools",
   "version": "2026.3.22",
-  "private": true,
   "description": "OpenClaw Volcengine TOS Toolkit plugin",
   "type": "module",
   "dependencies": {

@@ -1,0 +1,42 @@
+{
+  "id": "tos-tools",
+  "name": "TOS Tools",
+  "description": "Volcengine TOS (S3 compatible) Toolkit",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "endpoint": {
+        "type": "string"
+      },
+      "region": {
+        "type": "string"
+      },
+      "accessKeyId": {
+        "type": "string"
+      },
+      "secretAccessKey": {
+        "type": "string"
+      }
+    }
+  },
+  "uiHints": {
+    "endpoint": {
+      "label": "TOS Endpoint",
+      "help": "TOS API Endpoint (e.g. https://tos-cn-beijing.volces.com)"
+    },
+    "region": {
+      "label": "TOS Region",
+      "help": "TOS Region (e.g. cn-beijing)"
+    },
+    "accessKeyId": {
+      "label": "TOS Access Key ID",
+      "help": "Your Volcengine Access Key ID"
+    },
+    "secretAccessKey": {
+      "label": "TOS Secret Access Key",
+      "help": "Your Volcengine Secret Access Key",
+      "sensitive": true
+    }
+  }
+}

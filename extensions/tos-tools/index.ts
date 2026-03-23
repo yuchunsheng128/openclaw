@@ -1,9 +1,9 @@
 import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-import { 
-  createTosListObjectsTool, 
-  createTosPutObjectTool, 
+import {
+  createTosListObjectsTool,
+  createTosPutObjectTool,
   createTosGetObjectTool,
-  createTosPresignedUrlTool
+  createTosPresignedUrlTool,
 } from "./src/tos-tools.js";
 
 export default definePluginEntry({

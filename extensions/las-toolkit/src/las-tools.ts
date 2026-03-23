@@ -8,7 +8,7 @@ const LasSubmitSchema = Type.Object(
     operator_version: Type.String({ description: "The operator version, e.g. v2" }),
     data: Type.Any({ description: "The request payload data specific to the operator" }),
   },
-  { additionalProperties: false }
+  { additionalProperties: false },
 );
 
 export function createLasSubmitTool(api: OpenClawPluginApi) {
@@ -20,11 +20,13 @@ export function createLasSubmitTool(api: OpenClawPluginApi) {
     execute: async (_toolCallId: string, rawParams: Record<string, unknown>) => {
       const endpoint = (api.config as any).endpoint as string | undefined;
       let apiKey = (api.config as any).apiKey as string | undefined;
-      
+
       if (!endpoint || !apiKey) {
         apiKey = process.env.LAS_API_KEY || apiKey;
         if (!endpoint || !apiKey) {
-            return jsonResult({ error: "Missing LAS endpoint or apiKey in config or LAS_API_KEY environment variable." });
+          return jsonResult({
+            error: "Missing LAS endpoint or apiKey in config or LAS_API_KEY environment variable.",
+          });
         }
       }
 
@@ -32,20 +34,20 @@ export function createLasSubmitTool(api: OpenClawPluginApi) {
       const operatorVersion = readStringParam(rawParams, "operator_version", { required: true });
       const data = rawParams.data;
 
-      const url = `${endpoint.replace(/\/$/, '')}/api/v1/submit`;
-      
+      const url = `${endpoint.replace(/\/$/, "")}/api/v1/submit`;
+
       try {
         const response = await fetch(url, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': apiKey,
+            "Content-Type": "application/json",
+            Authorization: apiKey,
           },
           body: JSON.stringify({
             operator_id: operatorId,
             operator_version: operatorVersion,
-            data
-          })
+            data,
+          }),
         });
 
         const json = await response.json();
@@ -53,7 +55,7 @@ export function createLasSubmitTool(api: OpenClawPluginApi) {
       } catch (error: any) {
         return jsonResult({ error: `Failed to submit LAS task: ${error.message}` });
       }
-    }
+    },
   };
 }
 
@@ -63,7 +65,7 @@ const LasPollSchema = Type.Object(
     operator_version: Type.String({ description: "The operator version, e.g. v2" }),
     task_id: Type.String({ description: "The task ID to poll" }),
   },
-  { additionalProperties: false }
+  { additionalProperties: false },
 );
 
 export function createLasPollTool(api: OpenClawPluginApi) {
@@ -75,11 +77,13 @@ export function createLasPollTool(api: OpenClawPluginApi) {
     execute: async (_toolCallId: string, rawParams: Record<string, unknown>) => {
       const endpoint = (api.config as any).endpoint as string | undefined;
       let apiKey = (api.config as any).apiKey as string | undefined;
-      
+
       if (!endpoint || !apiKey) {
         apiKey = process.env.LAS_API_KEY || apiKey;
         if (!endpoint || !apiKey) {
-            return jsonResult({ error: "Missing LAS endpoint or apiKey in config or LAS_API_KEY environment variable." });
+          return jsonResult({
+            error: "Missing LAS endpoint or apiKey in config or LAS_API_KEY environment variable.",
+          });
         }
       }
 
@@ -87,20 +91,20 @@ export function createLasPollTool(api: OpenClawPluginApi) {
       const operatorVersion = readStringParam(rawParams, "operator_version", { required: true });
       const taskId = readStringParam(rawParams, "task_id", { required: true });
 
-      const url = `${endpoint.replace(/\/$/, '')}/api/v1/poll`;
-      
+      const url = `${endpoint.replace(/\/$/, "")}/api/v1/poll`;
+
       try {
         const response = await fetch(url, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': apiKey,
+            "Content-Type": "application/json",
+            Authorization: apiKey,
           },
           body: JSON.stringify({
             operator_id: operatorId,
             operator_version: operatorVersion,
-            task_id: taskId
-          })
+            task_id: taskId,
+          }),
         });
 
         const json = await response.json();
@@ -108,7 +112,7 @@ export function createLasPollTool(api: OpenClawPluginApi) {
       } catch (error: any) {
         return jsonResult({ error: `Failed to poll LAS task: ${error.message}` });
       }
-    }
+    },
   };
 }
 
@@ -116,9 +120,11 @@ const LasGenericRequestSchema = Type.Object(
   {
     path: Type.String({ description: "The API path, e.g. /api/v1/embeddings/multimodal" }),
     body: Type.Any({ description: "The JSON body for the request" }),
-    use_bearer: Type.Optional(Type.Boolean({ description: "Whether to prefix Authorization with 'Bearer '" }))
+    use_bearer: Type.Optional(
+      Type.Boolean({ description: "Whether to prefix Authorization with 'Bearer '" }),
+    ),
   },
-  { additionalProperties: false }
+  { additionalProperties: false },
 );
 
 export function createLasGenericRequestTool(api: OpenClawPluginApi) {
@@ -130,11 +136,13 @@ export function createLasGenericRequestTool(api: OpenClawPluginApi) {
     execute: async (_toolCallId: string, rawParams: Record<string, unknown>) => {
       const endpoint = (api.config as any).endpoint as string | undefined;
       let apiKey = (api.config as any).apiKey as string | undefined;
-      
+
       if (!endpoint || !apiKey) {
         apiKey = process.env.LAS_API_KEY || apiKey;
         if (!endpoint || !apiKey) {
-            return jsonResult({ error: "Missing LAS endpoint or apiKey in config or LAS_API_KEY environment variable." });
+          return jsonResult({
+            error: "Missing LAS endpoint or apiKey in config or LAS_API_KEY environment variable.",
+          });
         }
       }
 
@@ -142,17 +150,17 @@ export function createLasGenericRequestTool(api: OpenClawPluginApi) {
       const body = rawParams.body;
       const useBearer = rawParams.use_bearer === true;
 
-      const url = `${endpoint.replace(/\/$/, '')}${path.startsWith('/') ? path : `/${path}`}`;
+      const url = `${endpoint.replace(/\/$/, "")}${path.startsWith("/") ? path : `/${path}`}`;
       const authHeader = useBearer ? `Bearer ${apiKey}` : apiKey;
-      
+
       try {
         const response = await fetch(url, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': authHeader,
+            "Content-Type": "application/json",
+            Authorization: authHeader,
           },
-          body: JSON.stringify(body)
+          body: JSON.stringify(body),
         });
 
         const json = await response.json();
@@ -160,6 +168,6 @@ export function createLasGenericRequestTool(api: OpenClawPluginApi) {
       } catch (error: any) {
         return jsonResult({ error: `Failed to make LAS request: ${error.message}` });
       }
-    }
+    },
   };
 }

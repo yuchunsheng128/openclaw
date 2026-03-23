@@ -4,12 +4,12 @@
   "private": true,
   "description": "OpenClaw Volcengine TOS Toolkit plugin",
   "type": "module",
+  "dependencies": {
+    "@volcengine/tos-sdk": "^2.9.1"
+  },
   "openclaw": {
     "extensions": [
       "./index.ts"
     ]
-  },
-  "dependencies": {
-    "@volcengine/tos-sdk": "^2.9.1"
   }
 }

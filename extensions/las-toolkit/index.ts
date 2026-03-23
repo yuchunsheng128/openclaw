@@ -1,5 +1,9 @@
 import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-import { createLasSubmitTool, createLasPollTool, createLasGenericRequestTool } from "./src/las-tools.js";
+import {
+  createLasSubmitTool,
+  createLasPollTool,
+  createLasGenericRequestTool,
+} from "./src/las-tools.js";
 
 export default definePluginEntry({
   id: "las-toolkit",

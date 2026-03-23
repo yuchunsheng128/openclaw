@@ -15,15 +15,18 @@ This skill details how to call various operators using the `las_submit` tool. Al
 - **data**: A JSON object containing the input data and configuration for the specific operator.
 
 ## Important Note on Input URLs
+
 All input URLs across all operators support both public `http(s)://` endpoints and `tos://` protocol scheme URLs for internal Volcano Engine TOS access. Always prefer TOS URLs when interacting directly with TOS buckets to bypass public internet constraints.
 
 ## Available Operators
 
 ### 1. Audio / Speech Recognition (ASR)
+
 - **operator_id**: `las_asr`, `las_asr_bp`, `las_asr_pro`, `las_asr_pro_bp`
 - **operator_version**: `v2` (for `las_asr`, `las_asr_bp`), `v1` (for `las_asr_pro`, `las_asr_pro_bp`)
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure**:
+
 ```json
 {
   "audio": {
@@ -38,10 +41,12 @@ All input URLs across all operators support both public `http(s)://` endpoints a
 ```
 
 ### 2. Audio Convert
+
 - **operator_id**: `las_audio_convert`
 - **operator_version**: `v1`
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure**:
+
 ```json
 {
   "audio_url": "tos://.../audio.wav",
@@ -51,10 +56,12 @@ All input URLs across all operators support both public `http(s)://` endpoints a
 ```
 
 ### 3. Audio Extract and Split
+
 - **operator_id**: `las_audio_extract_and_split`
 - **operator_version**: `v1`
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure**:
+
 ```json
 {
   "video_url": "tos://.../video.mp4",
@@ -63,9 +70,11 @@ All input URLs across all operators support both public `http(s)://` endpoints a
 ```
 
 ### 4. Bare Image Text Embedding
+
 - **Execution Mode**: **Sync**
 - **Generic Request Tool (`las_generic_request`)** is required since this uses a specific embedding endpoint: `/api/v1/embeddings/multimodal`
 - **Body Structure**:
+
 ```json
 {
   "model": "doubao-embedding-vision-250615",
@@ -86,10 +95,12 @@ All input URLs across all operators support both public `http(s)://` endpoints a
 ```
 
 ### 5. Image Resample
+
 - **operator_id**: `las_image_resample`
 - **operator_version**: `v1`
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure**:
+
 ```json
 {
   "image_url": "tos://.../image.jpg",
@@ -100,10 +111,12 @@ All input URLs across all operators support both public `http(s)://` endpoints a
 ```
 
 ### 6. Long Video Understand
+
 - **operator_id**: `las_long_video_understand`
 - **operator_version**: `v1`
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure**:
+
 ```json
 {
   "video_url": "tos://.../video.mp4",
@@ -113,10 +126,12 @@ All input URLs across all operators support both public `http(s)://` endpoints a
 ```
 
 ### 7. PDF Parse (Doubao)
+
 - **operator_id**: `las_pdf_parse_doubao`
 - **operator_version**: `v1`
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure**:
+
 ```json
 {
   "pdf_url": "tos://.../document.pdf",
@@ -125,10 +140,13 @@ All input URLs across all operators support both public `http(s)://` endpoints a
 ```
 
 ### 8. Seed (Video Generation Models)
+
 Includes `las_seed_1_8`, `las_seed_2_0`, `las_seedance`, `las_seedream`
+
 - **operator_version**: `v1`
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure (example for text2video)**:
+
 ```json
 {
   "prompt": "A beautiful sunset over the mountains",
@@ -139,10 +157,12 @@ Includes `las_seed_1_8`, `las_seed_2_0`, `las_seedance`, `las_seedream`
 ```
 
 ### 9. Video Edit
+
 - **operator_id**: `las_video_edit`
 - **operator_version**: `v1`
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure**:
+
 ```json
 {
   "video_url": "tos://.../video.mp4",
@@ -153,10 +173,12 @@ Includes `las_seed_1_8`, `las_seed_2_0`, `las_seedance`, `las_seedream`
 ```
 
 ### 10. Video Inpaint (Watermark Removal)
+
 - **operator_id**: `las_video_inpaint`
 - **operator_version**: `v1`
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure**:
+
 ```json
 {
   "video_url": "tos://.../video.mp4",
@@ -166,10 +188,12 @@ Includes `las_seed_1_8`, `las_seed_2_0`, `las_seedance`, `las_seedream`
 ```
 
 ### 11. Video Resize
+
 - **operator_id**: `las_video_resize`
 - **operator_version**: `v1`
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure**:
+
 ```json
 {
   "video_path": "tos://.../input_video.mp4",
@@ -183,10 +207,12 @@ Includes `las_seed_1_8`, `las_seed_2_0`, `las_seedance`, `las_seedream`
 ```
 
 ### 12. VLM Video
+
 - **operator_id**: `las_vlm_video`
 - **operator_version**: `v1`
 - **Execution Mode**: **Async** (Use `las_submit`, wait for `task_id`, then loop `las_poll`)
 - **data Structure**:
+
 ```json
 {
   "model_name": "doubao-seed-1.6",
@@ -216,6 +242,7 @@ Some endpoints return the data immediately (like generic embeddings request). Ch
 
 **Asynchronous Endpoints (Submit/Poll Mechanism):**
 Most generation, conversion, and complex extraction operators return a Task ID.
+
 1. Submit task using `las_submit`
 2. Extract `"task_id"` from `"metadata"` object in response
    ```json
@@ -231,4 +258,4 @@ Most generation, conversion, and complex extraction operators return a Task ID.
 4. Continue polling (with a reasonable interval, e.g., 5-10 seconds) until `task_status` is `"COMPLETED"`, `"FAILED"`, or `"CANCELLED"`.
 5. Retrieve the `data` containing output TOS URLs or direct JSON text from the completed polling response.
 
-*Note: For all TOS outputs, make sure you configure your LAS service to have write permissions to your target bucket/directory in TOS.*
+_Note: For all TOS outputs, make sure you configure your LAS service to have write permissions to your target bucket/directory in TOS._

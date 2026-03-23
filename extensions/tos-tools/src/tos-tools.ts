@@ -1,15 +1,22 @@
-import { Type } from "@sinclair/typebox";
-import { jsonResult, readStringParam, readNumberParam } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-runtime";
-import { TosClient } from "@volcengine/tos-sdk";
 import * as fs from "fs";
 import * as path from "path";
+import { Type } from "@sinclair/typebox";
+import { TosClient } from "@volcengine/tos-sdk";
+import { jsonResult, readStringParam, readNumberParam } from "openclaw/plugin-sdk/agent-runtime";
+import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-runtime";
 
 function getTosClient(api: OpenClawPluginApi) {
-  const endpoint = (api.config as any).endpoint as string | undefined || process.env.TOS_ENDPOINT;
-  const region = (api.config as any).region as string | undefined || process.env.TOS_REGION || "cn-beijing";
-  const accessKeyId = (api.config as any).accessKeyId as string | undefined || process.env.VOLCENGINE_ACCESS_KEY_ID || process.env.TOS_ACCESS_KEY;
-  const secretAccessKey = (api.config as any).secretAccessKey as string | undefined || process.env.VOLCENGINE_SECRET_ACCESS_KEY || process.env.TOS_SECRET_KEY;
+  const endpoint = ((api.config as any).endpoint as string | undefined) || process.env.TOS_ENDPOINT;
+  const region =
+    ((api.config as any).region as string | undefined) || process.env.TOS_REGION || "cn-beijing";
+  const accessKeyId =
+    ((api.config as any).accessKeyId as string | undefined) ||
+    process.env.VOLCENGINE_ACCESS_KEY_ID ||
+    process.env.TOS_ACCESS_KEY;
+  const secretAccessKey =
+    ((api.config as any).secretAccessKey as string | undefined) ||
+    process.env.VOLCENGINE_SECRET_ACCESS_KEY ||
+    process.env.TOS_SECRET_KEY;
 
   if (!endpoint || !accessKeyId || !secretAccessKey) {
     throw new Error("Missing TOS credentials or endpoint in config/environment");
@@ -28,9 +35,9 @@ const TosListObjectsSchema = Type.Object(
   {
     bucket: Type.String({ description: "Bucket name" }),
     prefix: Type.Optional(Type.String({ description: "Prefix to filter objects" })),
-    max_keys: Type.Optional(Type.Number({ description: "Maximum number of keys to return" }))
+    max_keys: Type.Optional(Type.Number({ description: "Maximum number of keys to return" })),
   },
-  { additionalProperties: false }
+  { additionalProperties: false },
 );
 
 export function createTosListObjectsTool(api: OpenClawPluginApi) {
@@ -49,24 +56,25 @@ export function createTosListObjectsTool(api: OpenClawPluginApi) {
         const response = await client.listObjects({
           bucket,
           prefix,
-          maxKeys: maxKeys || 100
+          maxKeys: maxKeys || 100,
         });
-        
-        const items = response.data.Contents?.map(item => ({
-          key: item.Key,
-          size: item.Size,
-          lastModified: item.LastModified
-        })) || [];
+
+        const items =
+          response.data.Contents?.map((item) => ({
+            key: item.Key,
+            size: item.Size,
+            lastModified: item.LastModified,
+          })) || [];
 
         return jsonResult({
           items,
           isTruncated: response.data.IsTruncated,
-          nextContinuationToken: response.data.NextContinuationToken
+          nextContinuationToken: response.data.NextContinuationToken,
         });
       } catch (error: any) {
         return jsonResult({ error: `Failed to list TOS objects: ${error.message}` });
       }
-    }
+    },
   };
 }
 
@@ -75,9 +83,9 @@ const TosPutObjectSchema = Type.Object(
     bucket: Type.String({ description: "Bucket name" }),
     key: Type.String({ description: "Object key" }),
     file_path: Type.String({ description: "Local file path to upload" }),
-    content_type: Type.Optional(Type.String({ description: "Content type of the object" }))
+    content_type: Type.Optional(Type.String({ description: "Content type of the object" })),
   },
-  { additionalProperties: false }
+  { additionalProperties: false },
 );
 
 export function createTosPutObjectTool(api: OpenClawPluginApi) {
@@ -108,7 +116,7 @@ export function createTosPutObjectTool(api: OpenClawPluginApi) {
       } catch (error: any) {
         return jsonResult({ error: `Failed to put TOS object: ${error.message}` });
       }
-    }
+    },
   };
 }
 
@@ -116,9 +124,9 @@ const TosGetObjectSchema = Type.Object(
   {
     bucket: Type.String({ description: "Bucket name" }),
     key: Type.String({ description: "Object key" }),
-    download_path: Type.String({ description: "Local path to save the downloaded file" })
+    download_path: Type.String({ description: "Local path to save the downloaded file" }),
   },
-  { additionalProperties: false }
+  { additionalProperties: false },
 );
 
 export function createTosGetObjectTool(api: OpenClawPluginApi) {
@@ -136,20 +144,20 @@ export function createTosGetObjectTool(api: OpenClawPluginApi) {
 
         const dir = path.dirname(downloadPath);
         if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
+          fs.mkdirSync(dir, { recursive: true });
         }
 
         await client.getObjectToFile({
           bucket,
           key,
-          filePath: downloadPath
+          filePath: downloadPath,
         });
 
         return jsonResult({ success: true, downloadPath });
       } catch (error: any) {
         return jsonResult({ error: `Failed to get TOS object: ${error.message}` });
       }
-    }
+    },
   };
 }
 
@@ -157,9 +165,11 @@ const TosPresignedUrlSchema = Type.Object(
   {
     bucket: Type.String({ description: "Bucket name" }),
     key: Type.String({ description: "Object key" }),
-    expires_in: Type.Optional(Type.Number({ description: "Expiration time in seconds (default 3600)" }))
+    expires_in: Type.Optional(
+      Type.Number({ description: "Expiration time in seconds (default 3600)" }),
+    ),
   },
-  { additionalProperties: false }
+  { additionalProperties: false },
 );
 
 export function createTosPresignedUrlTool(api: OpenClawPluginApi) {
@@ -178,13 +188,13 @@ export function createTosPresignedUrlTool(api: OpenClawPluginApi) {
         const url = client.getPreSignedUrl({
           bucket,
           key,
-          expires: expiresIn
+          expires: expiresIn,
         });
-        
+
         return jsonResult({ url });
       } catch (error: any) {
         return jsonResult({ error: `Failed to generate presigned URL: ${error.message}` });
       }
-    }
+    },
   };
 }

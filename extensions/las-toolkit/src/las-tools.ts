@@ -2,6 +2,22 @@ import { Type } from "@sinclair/typebox";
 import { jsonResult, readStringParam } from "openclaw/plugin-sdk/agent-runtime";
 import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-runtime";
 
+function getLasConfig(api: OpenClawPluginApi) {
+  const lasConfig = (api.config as any).las || {};
+  let apiKey = lasConfig.apiKey as string | undefined;
+  const region = (lasConfig.region as string | undefined) || process.env.LAS_REGION || "cn-beijing";
+
+  if (!apiKey) {
+    apiKey = process.env.LAS_API_KEY;
+  }
+
+  return { apiKey, region };
+}
+
+function getLasEndpoint(region: string) {
+  return `https://operator.las.${region}.volces.com`;
+}
+
 const LasSubmitSchema = Type.Object(
   {
     operator_id: Type.String({ description: "The operator ID, e.g. las_asr" }),
@@ -18,18 +34,15 @@ export function createLasSubmitTool(api: OpenClawPluginApi) {
     description: "Submit a task to Volcengine Lake AI Service (LAS)",
     parameters: LasSubmitSchema,
     execute: async (_toolCallId: string, rawParams: Record<string, unknown>) => {
-      const lasConfig = (api.config as any).las || {};
-      const endpoint = lasConfig.endpoint as string | undefined;
-      let apiKey = lasConfig.apiKey as string | undefined;
+      const { apiKey, region } = getLasConfig(api);
 
-      if (!endpoint || !apiKey) {
-        apiKey = process.env.LAS_API_KEY || apiKey;
-        if (!endpoint || !apiKey) {
-          return jsonResult({
-            error: "Missing LAS endpoint or apiKey in config or LAS_API_KEY environment variable.",
-          });
-        }
+      if (!apiKey) {
+        return jsonResult({
+          error: "Missing LAS apiKey in config or LAS_API_KEY environment variable.",
+        });
       }
+
+      const endpoint = getLasEndpoint(region);
 
       const operatorId = readStringParam(rawParams, "operator_id", { required: true });
       const operatorVersion = readStringParam(rawParams, "operator_version", { required: true });
@@ -76,18 +89,15 @@ export function createLasPollTool(api: OpenClawPluginApi) {
     description: "Poll the status and result of a task in Volcengine Lake AI Service (LAS)",
     parameters: LasPollSchema,
     execute: async (_toolCallId: string, rawParams: Record<string, unknown>) => {
-      const lasConfig = (api.config as any).las || {};
-      const endpoint = lasConfig.endpoint as string | undefined;
-      let apiKey = lasConfig.apiKey as string | undefined;
+      const { apiKey, region } = getLasConfig(api);
 
-      if (!endpoint || !apiKey) {
-        apiKey = process.env.LAS_API_KEY || apiKey;
-        if (!endpoint || !apiKey) {
-          return jsonResult({
-            error: "Missing LAS endpoint or apiKey in config or LAS_API_KEY environment variable.",
-          });
-        }
+      if (!apiKey) {
+        return jsonResult({
+          error: "Missing LAS apiKey in config or LAS_API_KEY environment variable.",
+        });
       }
+
+      const endpoint = getLasEndpoint(region);
 
       const operatorId = readStringParam(rawParams, "operator_id", { required: true });
       const operatorVersion = readStringParam(rawParams, "operator_version", { required: true });
@@ -136,18 +146,15 @@ export function createLasGenericRequestTool(api: OpenClawPluginApi) {
     description: "Make a generic POST request to Volcengine Lake AI Service (LAS) API",
     parameters: LasGenericRequestSchema,
     execute: async (_toolCallId: string, rawParams: Record<string, unknown>) => {
-      const lasConfig = (api.config as any).las || {};
-      const endpoint = lasConfig.endpoint as string | undefined;
-      let apiKey = lasConfig.apiKey as string | undefined;
+      const { apiKey, region } = getLasConfig(api);
 
-      if (!endpoint || !apiKey) {
-        apiKey = process.env.LAS_API_KEY || apiKey;
-        if (!endpoint || !apiKey) {
-          return jsonResult({
-            error: "Missing LAS endpoint or apiKey in config or LAS_API_KEY environment variable.",
-          });
-        }
+      if (!apiKey) {
+        return jsonResult({
+          error: "Missing LAS apiKey in config or LAS_API_KEY environment variable.",
+        });
       }
+
+      const endpoint = getLasEndpoint(region);
 
       const path = readStringParam(rawParams, "path", { required: true });
       const body = rawParams.body;

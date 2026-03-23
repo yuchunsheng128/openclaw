@@ -1,7 +1,7 @@
 ---
-name: las-apis
+name: call_las_api
 description: |
-  Documentation on how to call Volcengine Lake AI Service (LAS) operators. This skill outlines all available `las_submit` data structures and parameters.
+  Documentation on how to call Volcengine Lake AI Service (LAS) operators. This skill outlines all available `las_submit` data structures and parameters for tasks like ASR (speech recognition), video editing, resizing, inpainting, multi-modal embeddings, and video generation. Use this skill when the user asks you to interact with or process media using LAS.
 ---
 
 # LAS Toolkit Operator API Reference
